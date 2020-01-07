@@ -8,5 +8,5 @@ Basic Python
 
 Projects:
     - game
-    - data fetch, visulization
+    - data fetch, visualization
     - web application
