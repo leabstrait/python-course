@@ -45,7 +45,7 @@ bikes.remove('Pulsar NS 200')
 print(bikes)
 
 # Reverse a list
-print("\nReverse a list, no sorting")
+print("\nReverse a list permanently, no sorting")
 bikes.reverse()
 
 # Sorting a list and string in a new list
