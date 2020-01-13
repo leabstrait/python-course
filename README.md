@@ -88,8 +88,6 @@ git checkout
 > - Strong typing means that the type of a value doesn't change in unexpected ways. A string containing only digits doesn't magically become a number, as may happen in Perl. Every change of type requires an explicit conversion.
 > - Dynamic typing means that runtime objects (values) have a type, as opposed to static typing where variables have a type.
 
-  - Duck Typing
-
 - Data Types
   - Strings
     - String Formatting, *f*-strings
@@ -109,12 +107,8 @@ git checkout
 
 - Accessing and Slicing
 
-- List Comprehensions
-
-- Dictionaries - Key: Value pairs
-
 - Conditionals and Booleans - if, elif, else 
-
+  
 - Indentation Matters
   
 - Loops and Iterations - for, while
@@ -129,31 +123,44 @@ git checkout
   - *arg_parameter, **kwarg_parameter
   - """docstrings"""
 
+- Dictionaries - Key: Value pairs
+
+- Generators
+  
+- Comprehensions
+  - List
+  - Dict
+  - Set
+  - Generator
+  
 - Python's module system and The Standard Library
     - `pizza` module example
-    - `random` module
     - `os` module
     - `datetime` module
-    **Advanced modules**
+    **More stdlib modules**
+      - `random` module
       - `csv` module
       - `json` module
   
 - Variable Scope
   - LEGB Rule
-  
-- Error Handling
 
+- File I/O
+    - Automate parsing and renaming of multiple files
+
+- Context Managers
+  - 
+
+- Error Handling
+  - try / except / else / finally
+  
 - Object oriented Programming
   - Classes and Instances
   - Class Variables
   - classmethods and staticmethods
   - Inheritance 
   - Special / Magic methods `__method__`
-  - **Advanced Features**
-    - Property Decorators
-
-- File I/O
-    - Automate parsing and renaming of multiple files
+  - Property Decorators
 
 - pip - pip installs packages
   - pip help
@@ -169,7 +176,6 @@ git checkout
 
 **Advanced Features**
 
-- Generators
 
 - Decorators
 
