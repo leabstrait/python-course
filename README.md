@@ -148,11 +148,13 @@ git checkout
 - File I/O
     - Automate parsing and renaming of multiple files
 
-- Context Managers
-  - 
-
 - Error Handling
   - try / except / else / finally
+  
+- Decorators
+  - Decorators on functions
+  - Decorator Chaining
+  - Decorator with arguments
   
 - Object oriented Programming
   - Classes and Instances
@@ -160,6 +162,8 @@ git checkout
   - classmethods and staticmethods
   - Inheritance 
   - Special / Magic methods `__method__`
+    - `__str__()`
+    - `__repr__()`
   - Property Decorators
 
 - pip - pip installs packages
@@ -174,11 +178,22 @@ git checkout
   - pip install -r requirements.txt
   - pip uninstall
 
+- Databases
+  - with SQLite
+
+- Logging
+  - 
+
+- Testing your Code
+  - unittest
+
 **Advanced Features**
 
-
-- Decorators
-
+- Class Decorators
+- Context Managers
+- Iterators and Iterables
+- Multithreading
+- Multiprocessing
 
 ## Paths you may take next
 
