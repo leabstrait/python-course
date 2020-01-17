@@ -151,6 +151,11 @@ git checkout
 - Error Handling
   - try / except / else / finally
   
+- Functional Programming
+  - First Class Functions
+  - Higher Order Functions
+  - Closures
+
 - Decorators
   - Decorators on functions
   - Decorator Chaining
@@ -179,7 +184,9 @@ git checkout
   - pip uninstall
 
 - Databases
-  - with SQLite
+  - SQLite: Connection, Querying
+  - Using functions to run queries
+  - Explain ORM
 
 - Logging
   - 
