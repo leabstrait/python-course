@@ -160,6 +160,7 @@ git checkout
   - Decorators on functions
   - Decorator Chaining
   - Decorator with arguments
+  - Class Decorators  
   
 - Object oriented Programming
   - Classes and Instances
@@ -189,14 +190,13 @@ git checkout
   - Explain ORM
 
 - Logging
-  - 
+  - Logging levels
+  - Log Formatting
+  - Loggers
 
 - Testing your Code
-  - unittest
+  - unittest module
 
-**Advanced Features**
-
-- Class Decorators
 - Context Managers
 - Iterators and Iterables
 - Multithreading
