@@ -156,11 +156,12 @@ git checkout
     - `pizza` module example
     - `os` module
     - `datetime` module
-    **More stdlib modules**
-      - `random` module
-      - `csv` module
-      - `json` module
-  
+   
+  **More stdlib modules**
+    - `random` module
+    - `csv` module
+    - `json` module
+
 - Variable Scope
   - LEGB Rule
 
