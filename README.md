@@ -153,11 +153,11 @@ git checkout
   - Generator
   
 - Python's module system and The Standard Library
-    - `pizza` module example
-    - `os` module
-    - `datetime` module
-   
-  **More stdlib modules**
+  - `pizza` module example
+  - `os` module
+  - `datetime` module
+ 
+  - More stdlib modules
     - `random` module
     - `csv` module
     - `json` module
