@@ -83,10 +83,29 @@ git checkout
 
 ## The Python Programming Language - Topics
 
+- Guido van Rossum - 1980s - 1991 release
+- Named after Monty Python
+- Compiled(*PVM*) and Interpreted both but let's stick with interpreted for now.
+  
+```python
+>>> import this
+```
+- Python 3, around 2009
+
+>  Some changes in Python 3.0:
+>  - Print is now a function
+>  - Views and iterators instead of lists
+>  - The rules for ordering comparisons have been simplified. E.g. a heterogeneous list cannot be sorted, because all the elements of a list must be comparable to each other.
+>  - There is only one integer type left, i.e. int. long is int as well.
+>  - The division of two integers returns a float instead of an integer. "//" can be used to have the "old" behaviour.
+>  - Text Vs. Data Instead Of Unicode Vs. 8-bit
+
 - Typing Discipline
 > Python is strongly, dynamically typed.
 > - Strong typing means that the type of a value doesn't change in unexpected ways. A string containing only digits doesn't magically become a number, as may happen in Perl. Every change of type requires an explicit conversion.
 > - Dynamic typing means that runtime objects (values) have a type, as opposed to static typing where variables have a type.
+
+- Python Interpreter, REPL
 
 - Data Types
   - Strings
@@ -109,6 +128,8 @@ git checkout
 
 - Conditionals and Booleans - if, elif, else 
   
+- Dictionaries - Key: Value pairs
+  
 - Indentation Matters
   
 - Loops and Iterations - for, while
@@ -122,8 +143,6 @@ git checkout
   - *args(tuple), **kwargs(dict)
   - *arg_parameter, **kwarg_parameter
   - """docstrings"""
-
-- Dictionaries - Key: Value pairs
 
 - Generators
   
@@ -198,8 +217,11 @@ git checkout
   - unittest module
 
 - Context Managers
+  
 - Iterators and Iterables
+  
 - Multithreading
+  
 - Multiprocessing
 
 ## Paths you may take next
