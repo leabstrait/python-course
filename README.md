@@ -77,12 +77,15 @@ git log [--oneline]
 ```
 
 ```shell
-git checkout
+git checkout <branchname>
 ```
 
 
 ## The Python Programming Language - Topics
 
+- Open Source
+- High level datatypes, operations and language
+- Lots of Libraries
 - Guido van Rossum - 1980s - 1991 release
 - Named after Monty Python
 - Compiled(*PVM*) and Interpreted both but let's stick with interpreted for now.
@@ -105,24 +108,64 @@ git checkout
 > - Strong typing means that the type of a value doesn't change in unexpected ways. A string containing only digits doesn't magically become a number, as may happen in Perl. Every change of type requires an explicit conversion.
 > - Dynamic typing means that runtime objects (values) have a type, as opposed to static typing where variables have a type.
 
+- Python Programs Structue
+>  - Python programs are composed of modules
+>  - Modules contain statements
+>  - Statements contain expressions
+>  - Expressions create and process objects
+
 - Python Interpreter, REPL
 
 - Data Types
   - Strings
     - String Formatting, *f*-strings
+    - Special Characters \ Escape Sequences
   - Number Types (Integers & Floats)
+  - Booleans
+  - Mutable vs Immutable Data Types
+
+- Variables
+
+  - Assignments
+    ```python
+    x, y, z = 1, 2, "abcd"
+    five_millions = 5_000_000
+    small_float = .35
+    thousand = 10e3
+    ```
+
+  - Swap example
+
+    ```python
+    a, b = b, a
+    ```
+
+- Operators
+  - Arithmetic Operators
+  - Comparison Operators
+  - Logical Operators
+  - `is` vs. `==`
+    - `id(obj)` function
+  - Bitwise Operators
+  - Condittional Operators
+  - Overloaded Operators
+    - `+`, `*`
 
 - Keywords & Builtins
-```python
->>> import keyword
->>> keyword.kwlist
-```
-```python
->>> import builtins
->>> dir(builtins)
-```
+    ```python
+    >>> import keyword
+    >>> keyword.kwlist
+    ```
+    ```python
+    >>> import builtins
+    >>> dir(builtins)
+    ```
+  - in
+  - type, id, sum, min, max, len, any, all, sorted, reversed 
 
-- Lists, Tuples and Sets
+- Lists, Tuples, Sets, Frozen Sets
+  - Nestings
+  - Homogeneity vs Heterogeneity
 
 - Accessing and Slicing
 
