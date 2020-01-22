@@ -1,9 +1,4 @@
-num = 0
-
-while num <= 20:
-    if num % 2 == 0:
-        num += 1
+for num in range(1, 20):
+    if num % 2 != 0:
         continue
-    else:
-        print(num)
-        num += 1
+    print(num)
