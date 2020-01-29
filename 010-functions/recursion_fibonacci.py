@@ -1,24 +1,49 @@
-def fibonacci(n):
+import time
+
+
+def fibo(n):
     if n == 0:
-        return
+        return 1
     if n == 1:
-        return 1
-    elif n == 2:
-        return 1
+        return 1        
     else:
-        return fibonacci(n-1) + fibonacci(n-2)
-
-print(fibonacci(1))
-print(fibonacci(2))
-print(fibonacci(3))
-print(fibonacci(4))
-print(fibonacci(5))
-print(fibonacci(6))
+        return fibo(n-1) + fibo(n-2)
 
 
-for n in range(1, 10):
-    print(fibonacci(n))
+start = time.time()
+
+print(fibo(15))
+
+end = time.time()
+
+print("time taken: ", end-start)
 
 
-# Lets try:
-print(fibonacci(37))
+
+start = time.time()
+
+print(fibo(25))
+
+end = time.time()
+
+print("time taken: ", end-start)
+
+
+
+start = time.time()
+
+print(fibo(35))
+
+end = time.time()
+
+print("time taken: ", end-start)
+
+
+
+start = time.time()
+
+print(fibo(36))
+
+end = time.time()
+
+print("time taken: ", end-start)

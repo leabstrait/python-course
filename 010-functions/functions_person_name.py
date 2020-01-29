@@ -9,7 +9,7 @@ print(musician)
 
 
 def get_formatted_name_2(first_name, last_name, middle_name=''):
-    """Return a full name, neatly formatted."""
+    """Return a full name, neatly formatted."""a
     full_name = f"{first_name} {middle_name} {last_name}"
     return full_name.title()
 

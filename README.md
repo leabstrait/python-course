@@ -181,10 +181,8 @@ git checkout <branchname>
 - Functions
   - Methods vs Functions
   - Arguments vs Parameters -> arguments are passed into a method's parameters
-  - non arguments 
-  - args, kwargs, defaults
+  - Keyword arguments and defaults
   - *args(tuple), **kwargs(dict)
-  - *arg_parameter, **kwarg_parameter
   - """docstrings"""
 
 - Generators
@@ -233,6 +231,8 @@ git checkout <branchname>
   - Special / Magic methods `__method__`
     - `__str__()`
     - `__repr__()`
+    - `__eq__()`
+    - `__add__()`
   - Property Decorators
 
 - pip - pip installs packages

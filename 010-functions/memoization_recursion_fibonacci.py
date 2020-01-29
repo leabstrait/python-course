@@ -1,25 +1,18 @@
-remember_fib = {}
+remember_calc = {}
 
 
-def fibonacci(n):
+def fibo(n):
     if n == 0:
-        return
+        return 1
     if n == 1:
-        return 1
-    elif n == 2:
-        return 1
+        return 1        
     else:
-        if n-1 not in remember_fib:
-            remember_fib[n-1] = fibonacci(n-1)
-        if n-2 not in remember_fib:
-            remember_fib[n-2] = fibonacci(n-2)
-        
-        return remember_fib[n-1] + remember_fib[n-2]
+        if n-1 not in remember_calc:
+            remember_calc[n-1] = fibo(n-1)
+        if n-2 not in remember_calc:
+            remember_calc[n-2] = fibo(n-2)
+
+        return remember_calc[n-1] + remember_calc[n-2]
 
 
-for n in range(1, 10):
-    print(fibonacci(n))
-
-
-# Lets try:
-print(fibonacci(100))
+print(fibo(2))
