@@ -1,5 +1,3 @@
-### SET 00: pre
-
 1. find sum of all natural numbers between 1 to n
     ```python
     numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -218,10 +216,7 @@
     print(len(numbers))
     ```
 
-5. encrypt the message with Caesar Cipher
-    #### WIP
-
-6. find the number of lines in the file
+5. find the number of lines in the file
     ```python
     count = 0
     with open('exercises.org') as fp:
@@ -236,7 +231,7 @@
     os.system('wc -l exercises.org')
     ```
 
-7. print 10-20 lines of the file
+6. print 10-20 lines of the file
     ```python    
     count = 0
     with open('exercises.org') as fp:
@@ -250,7 +245,7 @@
     print(open('exercises.org').read().split('\n')[10:20])
     ```
 
-8. find the number of char in the file
+7. find the number of char in the file
     ```python    
     count = 0
     with open('exercises.md') as fp:
@@ -271,7 +266,7 @@
     print(os.path.getsize('exercises.md'))
     ```
 
-9.  find the number of words in the file
+8.  find the number of words in the file
     ```python    
     with open('exercises.org') as fp:
         data = fp.read()
@@ -279,7 +274,7 @@
     print(len(data.split()))
     ```
 
-10. digit count
+9.  digit count
     ```python
     num = 11235813 :results output
     freq = dict()
@@ -291,10 +286,8 @@
     print(*freq.items(), sep='\n')
     ```
     
-11. find HCF (GCD) of two numbers
-    #### WIP
 
-12. Magic square
+10. Magic square
 
     -------------
     | 8 | 1 | 6 | → 15 = 8 + 1 + 6
@@ -314,10 +307,10 @@
     secondary diagonals, all add up to the same number, called the "magic
     constant".
 
-13. find LCM of two numbers
+11. find LCM of two numbers
     #### WIP
 
-14. print pascal triangle
+12. print pascal triangle
 
 
     for i in range(5):

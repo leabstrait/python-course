@@ -4,7 +4,7 @@ value = random.random()
 print(value)        # A value between 0 and 1
 
 value = random.uniform(1, 10)
-print(value)        # A floating point bvalue between 1 and 10
+print(value)        # A floating point value between 1 and 10
 
 value = random.randint(1, 6)
 print(value)        # A random integer between 1 and 6, In this case simulate a roll of a dice
@@ -12,7 +12,7 @@ print(value)        # A random integer between 1 and 6, In this case simulate a 
 value = random.randint(0, 1)
 print(value)        # A random integer between 1 and 0, In this case simulate a flip of a coin
 
-people = ['a','b','c'] #A list of students in the class
+people = ['darshan','aman','gopal'] #A list of students in the class
 choice = random.choice(people)
 print(choice, "will answer the next question")        # Choose one person from the list randomly
 

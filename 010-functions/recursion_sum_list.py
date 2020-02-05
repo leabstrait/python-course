@@ -2,8 +2,8 @@ def sum_list(lon):
     if len(lon) == 1:
         return lon[0]
     else:
-        lon[1] = lon[0] + lon[1]
-        return sum_list(lon[1:])
+        return lon[0] + sum_list(lon[1:])
+       
 
 
     

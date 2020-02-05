@@ -15,8 +15,11 @@ def is_anagram_2(w1, w2):
        return set(w1) == set(w2)
     return False
 
-
 def is_anagram_3(w1, w2):
+    return sorted(list(w1))== sorted(list(set(w2)))
+
+
+def is_anagram_4(w1, w2):
     charcount_1 = {}
     charcount_2 = {}
 
@@ -34,6 +37,9 @@ def is_anagram_3(w1, w2):
 
 
 print(is_anagram('mango', 'ongma'))
+
+# Corner case, revise code
+print(is_anagram('mann', 'namm'))
 print(is_anagram_2('nmago', 'omgna'))
 print(is_anagram_3('mango', 'goman'))  
 

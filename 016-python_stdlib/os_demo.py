@@ -21,6 +21,8 @@ os.rmdir()
 
 os.removedirs()
 
+os.path.join(base, specific)
+
 os.rename(src, dst)
 
 os.stat(path)
