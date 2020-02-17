@@ -34,13 +34,18 @@ class Employee:
         # End User Representation
         return f"{self.fullname()} - {self.email}"
 
+    def __add__(self, other):
+        return f"The total salary will be {self.pay + other.pay}"
+
 emp_1 = Employee("Labin", "Ojha", 300000)
 emp_2 = Employee("Test", "User", 100000)
 
-print(emp_1)
+print(emp_1 + emp_2) 
 
-print(repr(emp_1))
-print(str(emp_1)) 
+# print(emp_1)
 
-print(emp_1.__repr__())
-print(emp_1.__str__())
+# print(repr(emp_1))
+# print(str(emp_1)) 
+
+# print(emp_1.__repr__())
+# print(emp_1.__str__())

@@ -49,4 +49,4 @@ import datetime
 my_date = datetime.date(2020, 1, 18)
 
 print(Employee.is_workday(my_date))
-print(emp_1.is_workday(my_date))    # only difference from classmethods and regular method is that staticmethods don't bind the instance or the class via their arguments
+print(emp_1.is_workday(my_date))    # only difference from classmethods and static method is that staticmethods don't bind the instance or the class via their arguments

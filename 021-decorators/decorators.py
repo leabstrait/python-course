@@ -15,16 +15,20 @@
 # 1 Basic decoration
 
 def decorator_function(original_function):
-    def wrapper_function():
+    def wrapper_function(*args, **kwargs):
         print(f'Wrapper executed this before {original_function.__name__.title()} Function')
-        return original_function()
+        original_function(*args, **kwargs)
+        print(f'Wrapper executed this after {original_function.__name__.title()} Function')
+        
     return wrapper_function
 
-def display():
+def display(*args, **kwargs):
     print('Display Function ran')
+    print(args, kwargs)
+
 
 decorated_display = decorator_function(display)
-decorated_display()
+decorated_display(1,2,3,4, name="Badri", surname='Aran')
 
 
 # The above 4 lines can also be written as below 3 lines, @decorator systax

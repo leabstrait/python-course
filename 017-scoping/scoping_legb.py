@@ -30,21 +30,3 @@ def min(num_list):
     return max(num_list)
 
 print(min([1,2,34,6,0]))
-
-# Enclosing
-# -------------------------------------------
-x = 'non enclosed x'
-def outer():
-    x = 'outer x'
-
-    def inner():
-        # global x          # we could do this to let x away from this enclosing scope but it'll overwrite the global scope but not the enclosing one.
-        # nonlocal x        # instead we do this 
-        x = 'inner x'       # try removing this line
-        print(x)
-
-    inner()
-    print(x)
-
-outer()
-print(x)

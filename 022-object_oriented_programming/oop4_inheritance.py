@@ -1,4 +1,4 @@
-class Employee:
+class Employee():
 
     # Class Variable
     num_of_emps = 0
@@ -61,25 +61,25 @@ class Manager(Employee):
 dev_1 = Developer("Labin", "Ojha", 300000, "Python")
 dev_2 = Developer("Test", "User", 100000, "Java")
 
-print(dev_1.email)
-print(dev_2.email)
+# print(dev_1.prog_lang)
+# print(dev_2.email)
 
 # Method Resolution Order, even if Developer is not defined, it searched the superclasses to find the specific methods
-print(help(dev_1))
+# print(help(dev_1))
 
 # Continuing
-print(dev_1.pay)
-dev_1.applyraise()
-print(dev_1.pay)
+# print(dev_1.pay)
+# dev_1.applyraise()
+# print(dev_1.pay)
 
-# Managers
+# # Managers
 mgr_1 = Manager('Swastik', 'Thapa', 200000, [dev_1])
 
-print(mgr_1.email)
+# print(mgr_1.email)
 
-mgr_1.print_employees()
-mgr_1.add_employee(dev_2)
-mgr_1.print_employees()
+# mgr_1.print_employees()
+# mgr_1.add_employee(dev_2)
+# mgr_1.print_employees()
 
 print(isinstance(mgr_1, Manager))
 print(issubclass(Manager, Employee))

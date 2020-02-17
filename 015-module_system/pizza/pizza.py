@@ -11,7 +11,6 @@ def make_pizza_ofsize(size, *toppings):
         print(f"- {topping}") 
         
 
-print(__name__)
 if __name__ == '__main__':        
             
     make_pizza('chicken') 

@@ -17,7 +17,7 @@ with open('test.txt', 'r+') as f:
     print(type(f))
     print(f.name)
     print(f.mode)
-    print(f.read())            # Read return a generator
+    print(f.read())      
     print(f.readlines())
     print(f.readline())
 

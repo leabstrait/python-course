@@ -44,6 +44,16 @@ results = [number for number in range(1,1001) if True in [True for divisor in ra
 results = {number:max([divisor for divisor in range(1,10) if number % divisor == 0]) for number in range(1,1001)}
 #print(results)
 
+# From the given dictionary, filter out the fruits and store in another dictionary
+stuff = {
+    'mango': 'fruit',
+    'apple': 'fruit',
+    'cauli': 'vegetable',
+    'potato': 'vegetable',
+    'rice':'grain',
+    'wheat':'grain'
+}
+{stuff: variant for stuff, variant in stuff.items() if variant=='fruit'}
 
 # Python program to print odd Numbers in a List 
    
