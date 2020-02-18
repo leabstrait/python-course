@@ -12,6 +12,10 @@ class TestAnonymousSurvey(unittest.TestCase):
     def tearDownClass(cls):
         print('\ntearDownClass')
 
+    # In test_survey.py we created a new instance of AnonymousSurvey in each
+    # test method, and we created new responses in each method. The 
+    # unittest.TestCase class has a setUp() method that allows you to create 
+    # these objects once and then use them in each of your test methods.
     def setUp(self):
         print('\nSetup')
         self.question = "What language did you first learn to program in?"
