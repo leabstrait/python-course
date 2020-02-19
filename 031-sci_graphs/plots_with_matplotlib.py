@@ -5,7 +5,6 @@ import tkinter
 from matplotlib import pyplot as plt
 
 # Hello matplotlib
-import 
 from matplotlib import pyplot as plt
 plt.plot([2,4,6,8,10])
 plt.show()
@@ -57,7 +56,13 @@ plt.bar(arange(0,10), arange(1,21,2), width=.5)
 plt.show()
 
 # Histograms
+from numpy import random
 plt.hist(random.randn(10000), 20)
-histogram of
-# 10,000 normally distributed (Gaussian) random numbers binned across 20 possible bars
+# histogram of 10,000 normally distributed (Gaussian) random numbers binned across 20 possible bars
+plt.show()
+
+
+# Courtesy ACEM BEX
+x = range(-180,180)
+plt.plot(list(x),list(map(math.sin, list(map(lambda t: t*math.pi/180,x)))))
 plt.show()
