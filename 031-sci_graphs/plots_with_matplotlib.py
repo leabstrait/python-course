@@ -63,6 +63,8 @@ plt.show()
 
 
 # Courtesy ACEM BEX
+import math
+
 x = range(-180,180)
 plt.plot(list(x),list(map(math.sin, list(map(lambda t: t*math.pi/180,x)))))
 plt.show()
