@@ -11,35 +11,42 @@ The best development environment is the one that suits the programmer's particul
 
 
 ## Command Line Environment
-Based on the Linux Shell, basic commands are introduced for navigation, file / folder management, utilities
+Based on the Linux Shell, basic commands are introduced for navigation, file / folder management, utilities, network, system admin
 
 
 ### The minimum basic commands
-- uname
-- pwd
-- ls
-- cd
-- mkdir & rmdir
-- touch
-- cp
-- locate 
-- which
-- mv
-- rm
-- man & --help
-- grep
-- echo
-- cat
-- nano / vi
-- sudo
-- df 
-- du
-- tar -cvf -xvf -tvf
-- zip unzip
-- chmod
-- hostname
-- ping
-
+```shell
+- uname                 (print certain system information)
+- pwd                   (print working directory)
+- ls                    (list contents of a directory)
+- cd                    (change into a directory)
+- mkdir & rmdir         (make and remove directories)
+- touch                 (create an empty file)
+- cp                    (copy)
+- locate                (find files by name)
+- which                 (show full path of commands) 
+- mv                    (move stuff)
+- rm                    (remove stuff)
+- man & --help          (get information about commands)
+- grep                  (search patterns in text)
+- echo                  (print out stuff)
+- cat                   (print out contents of a file)
+- nano / vi             (basic text editors)
+- sudo                  (elevate privileges)
+- df                    (show disk free)
+- du                    (show disk usage info)
+- tar -cvf -xvf -tvf    (utility for handling archives)
+- zip unzip             (same, utilities for handling archives)
+- chmod                 (modify premisions)
+- systemctl             (manage linux services)
+- hostname              (get current machines hostname)
+- ping                  (ping a network device)
+- ip                    (get ip addresses and other network information)
+- netstat               (network connection informations)
+- ps                    (get processes informations)
+- top / htop            (get running system imformations)
+- mount & umount        (mount and unmount filesystems)
+```
 
 ## Version Control with `git`
 
@@ -207,7 +214,6 @@ git checkout <branchname>
   - LEGB Rule
 
 - File I/O
-    - Automate parsing and renaming of multiple files
 
 - Error Handling
   - try / except / else / finally
@@ -262,7 +268,7 @@ git checkout <branchname>
 
 - Context Managers
   
-- Iterators and Iterables
+- Iterators and Iterables 
   
 - Multithreading
   
