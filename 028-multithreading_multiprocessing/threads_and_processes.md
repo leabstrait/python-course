@@ -1,95 +1,106 @@
-We have two common approaches to run code in parallel (achieve multitasking and speed up your program) : via threads or via multiple processes.
+**To run code in parallel for multitasking, use either threads or multiple processes.**
 
-Process¶
-A Process is an instance of a program, e.g. a Python interpreter. They are independent from each other and do not share the same memory.
+**Process:**
+- An instance of a program (e.g., Python interpreter).
+- Independent, not sharing the same memory.
+- Started independently, takes advantage of multiple CPUs and cores.
+- Separate memory space; memory is not shared between processes.
+- One Global Interpreter Lock (GIL) for each process, avoiding GIL limitation.
+- Great for CPU-bound processing; child processes are interruptable/killable.
+- Starting a process is slower than starting a thread.
+- Larger memory footprint.
+- More complicated Inter-Process Communication (IPC).
 
-Key facts: - A new process is started independently from the first process - Takes advantage of multiple CPUs and cores - Separate memory space - Memory is not shared between processes - One GIL (Global interpreter lock) for each process, i.e. avoids GIL limitation - Great for CPU-bound processing - Child processes are interruptable/killable
+**Threads:**
+- An entity within a process, scheduled for execution (lightweight process).
+- Multiple threads can be spawned within one process.
+- Memory is shared between all threads.
+- Faster to start than processes; great for I/O-bound tasks.
+- Lightweight with a low memory footprint.
+- One GIL for all threads, limiting their effectiveness for CPU-bound tasks.
+- Multithreading has no effect for CPU-bound tasks due to the GIL.
+- Not interruptible/killable; potential for memory leaks and race conditions.
 
-Starting a process is slower that starting a thread
-Larger memory footprint
-IPC (inter-process communication) is more complicated
-Threads¶
-A thread is an entity within a process that can be scheduled for execution (Also known as "leightweight process"). A Process can spawn multiple threads. The main difference is that all threads within a process share the same memory.
+**Threading in Python:**
+- Utilize the threading module.
+- Example:
+    ```python
+    from threading import Thread
 
-Key facts: - Multiple threads can be spawned within one process - Memory is shared between all threads - Starting a thread is faster than starting a process - Great for I/O-bound tasks - Leightweight - low memory footprint
+    def square_numbers():
+        for i in range(1000):
+            result = i * i
 
-One GIL for all threads, i.e. threads are limited by GIL
-Multithreading has no effect for CPU-bound tasks due to the GIL
-Not interruptible/killable -> be careful with memory leaks
-increased potential for race conditions
-Threading in Python¶
-Use the threading module.
+    if __name__ == "__main__":
+        threads = [Thread(target=square_numbers) for _ in range(10)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+    ```
 
-Note: The following example usually won't benefit from multiple threads since it is CPU-bound. It should just show the example of how to use threads.
+**When is Threading useful:**
+- Despite the GIL, useful for I/O-bound tasks where the program interacts with slow devices (e.g., hard drive, network).
+- Example: Downloading website information from multiple sites using a thread for each site.
 
-from threading import Thread
+**Multiprocessing:**
+- Utilize the multiprocessing module; similar syntax to threading.
+- Example:
+    ```python
+    from multiprocessing import Process
+    import os
 
-def square_numbers():
-    for i in range(1000):
-        result = i * i
+    def square_numbers():
+        for i in range(1000):
+            result = i * i
 
+    if __name__ == "__main__":
+        processes = [Process(target=square_numbers) for _ in range(os.cpu_count())]
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+    ```
 
-if __name__ == "__main__":        
-    threads = []
-    num_threads = 10
+**When is Multiprocessing useful:**
+- Useful for CPU-bound tasks involving extensive CPU operations on large datasets, requiring significant computation time.
+- Example: Calculating square numbers for all numbers from 1 to 1000000, using a process for each subset.
 
-    # create threads and asign a function for each thread
-    for i in range(num_threads):
-        thread = Thread(target=square_numbers)
-        threads.append(thread)
+**GIL - Global Interpreter Lock:**
+- **Definition:**
+  - A mutex (or lock) that permits only one thread to control the Python interpreter at any given time.
+  - Imposes a restriction, allowing only one thread's execution at a time, even in a multi-threaded architecture.
 
-    # start all threads
-    for thread in threads:
-        thread.start()
+- **Purpose and Necessity:**
+  - **Memory Management in CPython:**
+    - CPython, the reference implementation of Python, employs reference counting for memory management.
+    - Objects in Python have a reference count variable, tracking the number of references pointing to the object.
+    - If the reference count reaches zero, the memory occupied by the object is released.
 
-    # wait for all threads to finish
-    # block the main thread until these threads are finished
-    for thread in threads:
-        thread.join()
-When is Threading useful¶
-Despite the GIL it is useful for I/O-bound tasks when your program has to talk to slow devices, like a hard drive or a network connection. With threading the program can use the time waiting for these devices and intelligently do other tasks in the meantime.
+  - **Thread-Safety Concerns:**
+    - CPython's reference counting is not inherently thread-safe.
+    - Without protection, simultaneous increases or decreases in the reference count by two threads can lead to race conditions.
+    - Race conditions may result in either leaked memory or premature release of memory while a reference to the object still exists.
 
-Example: Download website information from multiple sites. Use a thread for each site.
+- **Avoiding the GIL:**
+  - The GIL is a source of controversy in the Python community due to its impact on concurrency.
 
-Multiprocessing¶
-Use the multiprocessing module. The syntax is very similar to above.
+  - **Main Strategies to Avoid the GIL:**
+    1. **Use Multiprocessing:**
+       - Opt for multiprocessing over threading to sidestep the GIL limitations.
+       - Each process operates independently with its own GIL, enabling parallel execution.
 
-from multiprocessing import Process
-import os
+    2. **Explore Alternative Implementations:**
+       - Use free-threaded Python implementations like Jython or IronPython, which lack a GIL.
+       - These alternatives offer a different approach to threading and may suit specific use cases.
 
+    3. **Utilize Binary Extensions Modules:**
+       - Move portions of the application into binary extensions modules.
+       - Python can act as a wrapper for third-party libraries, especially those written in C/C++.
+       - Exemplified by the approach taken by numpy and scipy.
 
-def square_numbers():
-    for i in range(1000):
-        result = i * i
+- **Controversies and Community Discussions:**
+  - The GIL has sparked ongoing debates within the Python community.
+  - Developers continually explore proposals and discussions aimed at mitigating GIL-related challenges and seeking alternative solutions.
 
-
-if __name__ == "__main__":
-    processes = []
-    num_processes = os.cpu_count()
-
-    # create processes and asign a function for each process
-    for i in range(num_processes):
-        process = Process(target=square_numbers)
-        processes.append(process)
-
-    # start all processes
-    for process in processes:
-        process.start()
-
-    # wait for all processes to finish
-    # block the main thread until these processes are finished
-    for process in processes:
-        process.join()
-When is Multiprocessing useful¶
-It is useful for CPU-bound tasks that have to do a lot of CPU operations for a large amount of data and require a lot of computation time. With multiprocessing you can split the data into equal parts an do parallel computing on different CPUs.
-
-Example: Calculate the square numbers for all numbers from 1 to 1000000. Divide the numbers into equal sized parts and use a process for each subset.
-
-GIL - Global interpreter lock¶
-This is a mutex (or a lock) that allows only one thread to hold control of the Python interpreter. This means that the GIL allows only one thread to execute at a time even in a multi-threaded architecture.
-
-Why is it needed?¶
-It is needed because CPython's (reference implementation of Python) memory management is not thread-safe. Python uses reference counting for memory management. It means that objects created in Python have a reference count variable that keeps track of the number of references that point to the object. When this count reaches zero, the memory occupied by the object is released. The problem was that this reference count variable needed protection from race conditions where two threads increase or decrease its value simultaneously. If this happens, it can cause either leaked memory that is never released or incorrectly release the memory while a reference to that object still exists.
-
-How to avoid the GIL¶
-The GIL is very controversial in the Python community. The main way to avoid the GIL is by using multiprocessing instead of threading. Another (however uncomfortable) solution would be to avoid the CPython implementation and use a free-threaded Python implementation like Jython or IronPython. A third option is to move parts of the application out into binary extensions modules, i.e. use Python as a wrapper for third party libraries (e.g. in C/C++). This is the path taken by numpy and scipy.
+Understanding the GIL's purpose, challenges, and avoidance strategies is essential for Python developers navigating concurrency issues in their applications.

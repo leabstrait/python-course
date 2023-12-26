@@ -1,292 +1,226 @@
-In this article we talk about how to use the multiprocessing module in Python.
-
-How to create and start multiple processes
-How to wait for processes to complete
-How to share data between processes
-How to use Locks to prevent race conditions
-How to use a Queue for process-safe data/task processing.
-How to use a Pool to manage multiple worker processes
-Create and run processes¶
-You create a process with multiprocessing.Process(). It takes two important arguments:
+- **Creating and Running Processes**
 
-target: a callable object (function) for this process to be invoked when the process starts
-args: the (function) arguments for the target function. This must be a tuple
-Start a process with process.start()
+  You create a process with `multiprocessing.Process()`. It takes two important arguments:
 
-Call process.join() to tell the program that it should wait for this process to complete before it continues with the rest of the code.
+  - `target`: a callable object (function) for this process to be invoked when the process starts.
+  - `args`: the (function) arguments for the target function. This must be a tuple.
 
-from multiprocessing import Process
-import os
+  Start a process with `process.start()`. Call `process.join()` to tell the program that it should wait for this process to complete before it continues with the rest of the code.
 
-def square_numbers():
-    for i in range(1000):
-        result = i * i
+  ```python
+  from multiprocessing import Process
+  import os
+
+  def square_numbers():
+      for i in range(1000):
+          result = i * i
+
+  if __name__ == "__main__":
+      processes = []
+      num_processes = os.cpu_count()
 
+      # Create processes and assign a function for each process
+      for i in range(num_processes):
+          process = Process(target=square_numbers)
+          processes.append(process)
+
+      # Start all processes
+      for process in processes:
+          process.start()
 
-if __name__ == "__main__":        
-    processes = []
-    num_processes = os.cpu_count()
-    # number of CPUs on the machine. Usually a good choise for the number of processes
+      # Wait for all processes to finish
+      # Block the main program until these processes are finished
+      for process in processes:
+          process.join()
+  ```
 
-    # create processes and asign a function for each process
-    for i in range(num_processes):
-        process = Process(target=square_numbers)
-        processes.append(process)
+- **Sharing Data Between Processes**
+
+  Since processes don't live in the same memory space, they need special shared memory objects to share data. Data can be stored in a shared memory variable using `Value` or `Array`.
+    - Value(type, value): Create a ctypes object of type type. Access the value with .target.
+    - Array(type, value): Create a ctypes array with elements of type type. Access the values with [].
+
+  ```python
+  from multiprocessing import Process, Value, Array
+  import time
 
-    # start all processes
-    for process in processes:
-        process.start()
+  def add_100(number):
+      for _ in range(100):
+          time.sleep(0.01)
+          number.value += 1
 
-    # wait for all processes to finish
-    # block the main programm until these processes are finished
-    for process in processes:
-        process.join()
-Share data between processes¶
-Since processes don't live in the same memory space, they do not have access to the same (public) data. Thus, they need special shared memory objects to share data.
+  def add_100_array(numbers):
+      for _ in range(100):
+          time.sleep(0.01)
+          for i in range(len(numbers)):
+              numbers[i] += 1
 
-Data can be stored in a shared memory variable using Value or Array.
+  if __name__ == "__main__":
+      shared_number = Value('i', 0)
+      print('Shared Value at beginning:', shared_number.value)
 
-Value(type, value): Create a ctypes object of type type. Access the value with .target.
-Array(type, value): Create a ctypes array with elements of type type. Access the values with [].
-Task: Create two processes, each process should have access to a shared variable and modify it (in this case only increase it repeatedly by 1 for 100 times). Create another two processes that share an array and modify (increase) all the elements in the array.
+      shared_array = Array('d', [0.0, 100.0, 200.0])
+      print('Shared Array at beginning:', shared_array[:])
 
-from multiprocessing import Process, Value, Array
-import time
+      process1 = Process(target=add_100, args=(shared_number,))
+      process2 = Process(target=add_100, args=(shared_number,))
 
-def add_100(number):
-    for _ in range(100):
-        time.sleep(0.01)
-        number.value += 1
+      process3 = Process(target=add_100_array, args=(shared_array,))
+      process4 = Process(target=add_100_array, args=(shared_array,))
 
-def add_100_array(numbers):
-    for _ in range(100):
-        time.sleep(0.01)
-        for i in range(len(numbers)):
-            numbers[i] += 1
+      process1.start()
+      process2.start()
+      process3.start()
+      process4.start()
 
+      process1.join()
+      process2.join()
+      process3.join()
+      process4.join()
 
-if __name__ == "__main__":
+      print('Shared Value at end:', shared_number.value)
+      print('Shared Array at end:', shared_array[:])
+  ```
 
-    shared_number = Value('i', 0) 
-    print('Value at beginning:', shared_number.value)
+  In this example, we can notice that the results aren't as expected, we expect the Shared Value to be 200 at the end as two processes work on it adding 100 each, but it's not 200.
+  Also same with the Shared Array, we need it to be [200, 300, 400] but it's not.
 
-    shared_array = Array('d', [0.0, 100.0, 200.0])
-    print('Array at beginning:', shared_array[:])
+- **Avoiding Race Conditions with Locks**
 
-    process1 = Process(target=add_100, args=(shared_number,))
-    process2 = Process(target=add_100, args=(shared_number,))
+  - A race condition occurs when two or more processes or threads can access shared data and try to change it at the same time.
+    - In the example the two processes have to read the shared value, increase it by 1, and write it back into the shared variable.
+    - If this happens at the same time, the two processes read the same value, increase it and write it back.
+    - Thus, both processes write the same increased value back into the shared object, and the value was not increased by 2.
+  - A `Lock` can prevent this by locking the state during critical code sections.
 
-    process3 = Process(target=add_100_array, args=(shared_array,))
-    process4 = Process(target=add_100_array, args=(shared_array,))
+  ```python
+  from multiprocessing import Lock, Process, Value, Array
+  import time
 
-    process1.start()
-    process2.start()
-    process3.start()
-    process4.start()
+  def add_100(number, lock):
+      for _ in range(100):
+          time.sleep(0.01)
+          lock.acquire()
+          number.value += 1
+          lock.release()
 
-    process1.join()
-    process2.join()
-    process3.join()
-    process4.join()
+  def add_100_array(numbers, lock):
+      for _ in range(100):
+          time.sleep(0.01)
+          for i in range(len(numbers)):
+              lock.acquire()
+              numbers[i] += 1
+              lock.release()
 
-    print('Value at end:', shared_number.value)
-    print('Array at end:', shared_array[:])
+  if __name__ == "__main__":
+      lock = Lock()
 
-    print('end main')
-Value at beginning: 0
-Array at beginning: [0.0, 100.0, 200.0]
-Value at end: 144
-Array at end: [134.0, 237.0, 339.0]
-end main
-How to use Locks¶
-Notice that in the above example, the 2 processes should increment the shared value by 1 for 100 times. This results in 200 total operations. But why is the end value not 200?
+      shared_number = Value('i', 0)
+      print('Shared Value at beginning:', shared_number.value)
 
-Race condition¶
-A race condition happened here. A race condition occurs when two or more processes or threads can access shared data and they try to change it at the same time. In our example the two processes have to read the shared value, increase it by 1, and write it back into the shared variable. If this happens at the same time, the two processes read the same value, increase it and write it back. Thus, both processes write the same increased value back into the shared object, and the value was not increased by 2. See https://www.python-engineer.com/learn/advancedpython16_threading/ for a detailed explanation of race conditions.
+      shared_array = Array('d', [0.0, 100.0, 200.0])
+      print('Shared Array at beginning:', shared_array[:])
 
-Avoid race conditions with Locks¶
-A lock (also known as mutex) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many processes/threads of execution. A Lock has two states: locked and unlocked. If the state is locked, it does not allow other concurrent processes/threads to enter this code section until the state is unlocked again.
+      process1 = Process(target=add_100, args=(shared_number, lock))
+      process2 = Process(target=add_100, args=(shared_number, lock))
 
-Two functions are important: - lock.acquire() : This will lock the state and block - lock.release() : This will unlock the state again.
+      process3 = Process(target=add_100_array, args=(shared_array, lock))
+      process4 = Process(target=add_100_array, args=(shared_array, lock))
 
-Important: You should always release the block again after it was acquired!
+      process1.start()
+      process2.start()
+      process3.start()
+      process4.start()
 
-In our example the critical code section where the shared variable is read and increased is now locked. This prevents the second process from modyfing the shared object at the same time. Not much has changed in our code. All new changes are commented in the code below.
+      process1.join()
+      process2.join()
+      process3.join()
+      process4.join()
 
-# import Lock
-from multiprocessing import Lock
-from multiprocessing import Process, Value, Array
-import time
+      print('Shared Value at end:', shared_number.value)
+      print('Shared Array at end:', shared_array[:])
+  ```
 
-def add_100(number, lock):
-    for _ in range(100):
-        time.sleep(0.01)
-        # lock the state
-        lock.acquire()
-
-        number.value += 1
+- **Using Locks as Context Managers**
 
-        # unlock the state
-        lock.release()
+  Locks can also be used as context managers, ensuring they are properly released.
 
-def add_100_array(numbers, lock):
-    for _ in range(100):
-        time.sleep(0.01)
-        for i in range(len(numbers)):
-            lock.acquire()
-            numbers[i] += 1
-            lock.release()
+  ```python
+  def add_100(number, lock):
+      for _ in range(100):
+          time.sleep(0.01)
+          with lock:
+              number.value += 1
+  ```
 
+- **Using Queues in Python**
 
-if __name__ == "__main__":
+  Data can be shared between processes with a `Queue`, which is thread and process-safe. It follows the First In First Out (FIFO) principle.
 
-    # create a lock
-    lock = Lock()
+  ```python
+  from multiprocessing import Process, Queue
 
-    shared_number = Value('i', 0) 
-    print('Value at beginning:', shared_number.value)
+  def square(numbers, queue):
+      for i in numbers:
+          queue.put(i * i)
 
-    shared_array = Array('d', [0.0, 100.0, 200.0])
-    print('Array at beginning:', shared_array[:])
+  def make_negative(numbers, queue):
+      for i in numbers:
+          queue.put(i * -1)
 
-    # pass the lock to the target function
-    process1 = Process(target=add_100, args=(shared_number, lock))
-    process2 = Process(target=add_100, args=(shared_number, lock))
+  if __name__ == "__main__":
+      numbers = range(1, 6)
+      q = Queue()
 
-    process3 = Process(target=add_100_array, args=(shared_array, lock))
-    process4 = Process(target=add_100_array, args=(shared_array, lock))
-
-    process1.start()
-    process2.start()
-    process3.start()
-    process4.start()
-
-    process1.join()
-    process2.join()
-    process3.join()
-    process4.join()
-
-    print('Value at end:', shared_number.value)
-    print('Array at end:', shared_array[:])
-
-    print('end main')
-Value at beginning: 0
-Array at beginning: [0.0, 100.0, 200.0]
-Value at end: 200
-Array at end: [200.0, 300.0, 400.0]
-end main
-Use the lock as a context manager¶
-After lock.acquire() you should never forget to call lock.release() to unblock the code. You can also use a lock as a context manager, wich will safely lock and unlock your code. It is recommended to use a lock this way:
+      p1 = Process(target=square, args=(numbers, q))
+      p2 = Process(target=make_negative, args=(numbers, q))
 
-def add_100(number, lock):
-    for _ in range(100):
-        time.sleep(0.01)
-        with lock:
-            number.value += 1
-Using Queues in Python¶
-Data can also be shared between processes with a Queue. Queues can be used for thread-safe/process-safe data exchanges and data processing both in a multithreaded and a multiprocessing environment, which means you can avoid having to use any synchronization primitives like locks.
+      p1.start()
+      p2.start()
 
-The queue¶
-A queue is a linear data structure that follows the First In First Out (FIFO) principle. A good example is a queue of customers that are waiting in line, where the customer that came first is served first.
+      p1.join()
+      p2.join()
 
-from multiprocessing import Queue
+      # ordering may not be sequential
+      while not q.empty():
+          print(q.get())
+  ```
+- **Process Pools**
 
-# create queue
-q = Queue()
+  - A process pool object in Python controls a pool of worker processes for job submission, supporting asynchronous results with timeouts, callbacks, and a parallel map implementation.  - It can automatically manage available processors, splitting data into smaller chunks processed in parallel by different processes. For detailed information, see [official documentation](https://docs.python.org/3.7/library/multiprocessing.html#multiprocessing.pool).
 
-# add elements
-q.put(1) # 1
-q.put(2) # 2 1
-q.put(3) # 3 2 1 
+  Important methods include:
 
-# now q looks like this:
-# back --> 3 2 1 --> front
+  - `map(func, iterable[, chunksize])`: Chops the iterable into chunks and submits them to the process pool as separate tasks. The chunk size can be specified with the `chunksize` parameter. It blocks until the result is ready.
 
-# get and remove first element
-first = q.get() # --> 1
-print(first) 
+  - `close()`: Prevents further tasks from being submitted to the pool. Once all tasks are completed, worker processes exit.
 
-# q looks like this:
-# back --> 3 2 --> front
-1
-Using a queue in multiprocessing¶
-Operations with a queue are process-safe. The multiprocessing Queue implements all the methods of queue.Queue except for task_done() and join(). Important methods are:
+  - `join()`: Waits for the worker processes to exit. You must call `close()` or `terminate()` before using `join()`.
 
-q.get() : Remove and return the first item. By default, it blocks until the item is available.
-q.put(item) : Puts element at the end of the queue. By default, it blocks until a free slot is available.
-q.empty() : Return True if the queue is empty.
-q.close() : Indicate that no more data will be put on this queue by the current process.
-# communicate between processes with the multiprocessing Queue
-# Queues are thread and process safe
-from multiprocessing import Process, Queue
+  - `apply(func, args)`: Calls the function `func` with arguments `args`. It blocks until the result is ready and is executed in only one of the workers of the pool.
 
-def square(numbers, queue):
-    for i in numbers:
-        queue.put(i*i)
+  Note: There are also asynchronous variants `map_async()` and `apply_async()` that do not block. They can execute callbacks when results are ready.
 
-def make_negative(numbers, queue):
-    for i in numbers:
-        queue.put(i*-1)
+  ```python
+  from multiprocessing import Pool
 
-if __name__ == "__main__":
+  def cube(number):
+      return number * number * number
 
-    numbers = range(1, 6)
-    q = Queue()
+  if __name__ == "__main__":
+      numbers = range(10)
 
-    p1 = Process(target=square, args=(numbers,q))
-    p2 = Process(target=make_negative, args=(numbers,q))
+      p = Pool()
 
-    p1.start()
-    p2.start()
+      # By default, this allocates the maximum number of available processors
+      # for this task --> os.cpu_count()
+      result = p.map(cube, numbers)
 
-    p1.join()
-    p2.join()
+      # or
+      # result = [p.apply(cube, args=(i,)) for i in numbers]
 
-    # order might not be sequential
-    while not q.empty():
-        print(q.get())
+      p.close()
+      p.join()
 
-    print('end main')
-1
-4
-9
-16
-25
--1
--2
--3
--4
--5
-end main
-Process Pools¶
-A process pool object controls a pool of worker processes to which jobs can be submitted It supports asynchronous results with timeouts and callbacks and has a parallel map implementation. It can automatically manage the available processors and split data into smaller chunks which can then be processed in parallel by different processes. See https://docs.python.org/3.7/library/multiprocessing.html#multiprocessing.pool for all possible methods. Important methods are:
-
-map(func, iterable[, chunksize]) : This method chops the iterable into a number of chunks which it submits to the process pool as separate tasks. The (approximate) size of these chunks can be specified by setting chunksize to a positive integer. It blocks until the result is ready.
-close() : Prevents any more tasks from being submitted to the pool. Once all the tasks have been completed the worker processes will exit.
-join(): Wait for the worker processes to exit. One must call close() or terminate() before using join().
-apply(func, args): Call func with arguments args. It blocks until the result is ready. func is only executed in ONE of the workers of the pool.
-Note: There are also asynchronous variants map_async() and apply_async() that will not block. They can execute callbacks when the results are ready.
-
-from multiprocessing import Pool 
-
-def cube(number):
-    return number * number * number
-
-
-if __name__ == "__main__":
-    numbers = range(10)
-
-    p = Pool()
-
-    # by default this allocates the maximum number of available 
-    # processors for this task --> os.cpu_count()
-    result = p.map(cube,  numbers)
-
-    # or 
-    # result = [p.apply(cube, args=(i,)) for i in numbers]
-
-    p.close()
-    p.join()
-
-    print(result)
-[0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+      print(result)
+  ```
